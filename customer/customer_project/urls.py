@@ -16,12 +16,13 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
-from line_up.views import LineupView, index, StoresListView
+from line_up.views import LineupView, index, StoresListView, SingleStoreListView
 
 
 urlpatterns = [
 	path('', index, name='home'),
 	path('stores/', StoresListView.as_view(), name='stores_list'),
+	path('stores/<str:state>', SingleStoreListView.as_view(), name='stores_in_state'),
     path('admin/', admin.site.urls),
     path('lineup/<int:store_id>', LineupView.as_view(), name='lineup')
 ]

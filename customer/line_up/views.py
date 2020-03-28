@@ -24,6 +24,12 @@ class StoresListView(ListView):
         return ctx
 
 
+class SingleStoreListView(ListView):
+    template_name = 'store_list.html'
+    def get_queryset(self):
+        return Store.objects.filter(state=self.kwargs['state'].upper())
+
+
 class LineupView(CreateView):
     model = Customer
     fields = ['phone_number']

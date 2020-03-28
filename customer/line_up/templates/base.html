@@ -17,7 +17,7 @@
       </div>
       {% if store %}
       <div class="text-center flex-auto self-center">
-        <a class="text-gray-700 hover:text-black text-2xl" href="/">See All Stores in {{ store.state }}</a>
+        <a class="text-gray-700 hover:text-black text-2xl" href={% url 'stores_in_state' store.state %}>See All Stores in {{ store.state }}</a>
       </div>
       {% endif %}
       </div>
