@@ -2,3 +2,4 @@ Django>=2.0,<3.0
 django-phone-field==1.8.0
 django-widget-tweaks==1.4.8
 psycopg2>=2.7,<3.0
+twilio==6.37.0
