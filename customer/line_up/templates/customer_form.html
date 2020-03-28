@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% load widget_tweaks %}
+
+{% block content %}
+<a class="text-black" href="/">See All Stores in {{ state }}</a>
+<div class="flex justify-center mx-8 md:mx-64">
+	<form method="post" class="min-w-full border-2 border-black py-2 px-2" id="lineup-form">
+		{% csrf_token %}
+		<p class="mb-2">Enter your phone number to get in line. Your phone number will be discarded from the system at the end of the day. Make sure that you are lining up for the correct store!</p>
+		<div class="form-fields mb-5">
+			<label class="font-bold text-black">
+	      Store: 
+	    </label>
+	    <label class="text-black">
+	    	{{ store.name }}, {{store.address }}
+	    </label>
+		  <label class="font-bold text-black" for="inline-phonenumber">
+	      Phone Number: 
+	    </label>
+	    {% render_field form.phone_number class="w-full border-2 border-gray rounded focus:outline-none focus:bg-white focus:border-black leading-10" id="inline-phonenumber" placeholder="555-555-5555" type="text" %}
+	  </div>
+    <div class="flex justify-center">
+			<button class="shadow bg-black hover:bg-gray-700 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="submit" form="lineup-form">
+	      Line Up
+	    </button>
+	  </div>
+	</form>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+	var extension_label = document.getElementsByClassName("phone-field-ext")[0];
+	var extension_field = document.getElementById("inline-phonenumber_1");
+	extension_label.style.display = "none"
+	extension_field.style.display = "none"
+</script>
+{% endblock %}

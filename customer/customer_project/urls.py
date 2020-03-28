@@ -16,6 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 
+from line_up.views import LineupView, index
+
+
 urlpatterns = [
+	path('', index, name='home'),
     path('admin/', admin.site.urls),
+    path('lineup/<int:store_id>', LineupView.as_view(), name='lineup')
 ]
