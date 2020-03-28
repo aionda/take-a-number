@@ -7,8 +7,16 @@
   </head>
   <body>
     {% block header %}
-    <div class="header mb-10 bg-black">
-      <a class="text-white" href="/">See All Stores</a>
+    <div class="flex justify-center sticky top-0 shadow bg-white header h-20">
+      <div class="text-center flex-auto self-center">
+        <a class="text-gray-700 hover:text-black text-2xl" href="/">See All Stores</a>
+      </div>
+      {% if store %}
+      <div class="text-center flex-auto self-center">
+        <a class="text-gray-700 hover:text-black text-2xl" href="/">See All Stores in {{ store.state }}</a>
+      </div>
+      {% endif %}
+      </div>
     </div>
     {% endblock %}
     {% block content %}{% endblock %}
