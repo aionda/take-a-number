@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
+from django.views.generic import ListView
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 
@@ -10,6 +11,17 @@ from .business_logic import send_text
 
 def index(request):
     return render(request, 'index.html')
+
+
+class StoresListView(ListView):
+    model = Store
+    template_name = 'store_list.html'
+    queryset = Store.objects.all().order_by('state')
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['stores_list_view'] = True
+        return ctx
 
 
 class LineupView(CreateView):

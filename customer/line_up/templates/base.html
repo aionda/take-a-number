@@ -9,7 +9,11 @@
     {% block header %}
     <div class="flex justify-center sticky top-0 shadow bg-white header h-20">
       <div class="text-center flex-auto self-center">
-        <a class="text-gray-700 hover:text-black text-2xl" href="/">See All Stores</a>
+        {% if not stores_list_view %}
+          <a class="text-gray-700 hover:text-black text-2xl" href={% url 'stores_list' %}>See All Stores</a>
+        {% else %}
+          <h1 class="text-2xl">All Stores</h1>
+        {% endif %}
       </div>
       {% if store %}
       <div class="text-center flex-auto self-center">

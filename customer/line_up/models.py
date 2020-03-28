@@ -13,28 +13,32 @@ class TimeStampedModel(models.Model):
 
 
 class MyUser(AbstractUser, TimeStampedModel):
-	pass
+    pass
 
 
 class Store(models.Model):
-	name = models.CharField(max_length=200)
-	address = models.CharField(max_length=500)
-	state = models.CharField(max_length=5)
-	contact_name = models.CharField(max_length=200)
-	contact_phone_number = PhoneField(E164_only=True)
+    name = models.CharField(max_length=200)
+    address = models.CharField(max_length=500)
+    state = models.CharField(max_length=5)
+    contact_name = models.CharField(max_length=200)
+    contact_phone_number = PhoneField(E164_only=True)
 
-	def __str__(self):
-		return f'{self.name}, {self.address}'
+    def save(self, *args, **kwargs):
+        self.state = self.state.upper().strip()
+        super().save(*args, **kwargs)
+    
+    def __str__(self):
+        return f'{self.name}, {self.address}'
 
 
 class Customer(models.Model):
-	phone_number = PhoneField(E164_only=True)
-	store_line = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
-	up_next_text_sent = models.BooleanField(default=False)
-	entered_store = models.BooleanField(default=False)
-	canceled = models.BooleanField(default=False)
-	image = models.CharField(max_length=500)
+    phone_number = PhoneField(E164_only=True)
+    store_line = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
+    up_next_text_sent = models.BooleanField(default=False)
+    entered_store = models.BooleanField(default=False)
+    canceled = models.BooleanField(default=False)
+    image = models.CharField(max_length=500)
 
-	def __str__(self):
-		return f'{self.phone_number}'
+    def __str__(self):
+        return f'{self.phone_number}'
 

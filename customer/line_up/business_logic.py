@@ -9,4 +9,4 @@ def send_text(recipient, message):
     client.messages.create(to=recipient.base_number,
                            from_=settings.TWILIO_NUMBER,
                            body=message)
-    return HttpResponse("initial messages sent!", 200)
+    return HttpResponse("initial message sent!", 200)
