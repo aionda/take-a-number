@@ -1,3 +1,4 @@
 __pycache__/
 *pyc
 customer/customer_project/settings.py
+dump.rdb
