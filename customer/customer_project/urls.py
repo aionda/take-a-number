@@ -14,7 +14,7 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, include
 
 from line_up.views import LineupView, index, StoresListView, SingleStoreListView, LineManagerView
 
@@ -26,5 +26,7 @@ urlpatterns = [
 	path('stores/<str:state>', SingleStoreListView.as_view(), name='stores_in_state'),
     path('manage_line/<int:store_id>', LineManagerView.as_view(), name='stores_line_manager'),
     path('admin/', admin.site.urls),
-    path('lineup/<int:store_id>', LineupView.as_view(), name='lineup')
+    path('lineup/<int:store_id>', LineupView.as_view(), name='lineup'),
+
+    path('django-rq/', include('django_rq.urls'))
 ]

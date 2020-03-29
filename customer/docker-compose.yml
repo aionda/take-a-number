@@ -3,6 +3,7 @@ version: '3'
 services:
   db:
     image: postgres:11
+
   web:
     build: .
     image: take-a-number_customer:latest
@@ -13,8 +14,32 @@ services:
       - "8000:8000"
     depends_on:
       - db
+      - redis
+
+  redis:
+    image: redis:3.2-alpine
+    volumes:
+      - redis_data:/data
+
+  redis-worker:
+    image: take-a-number_customer:latest
+    command: python manage.py rqworker default
+    volumes:
+      - .:/customer_app
+
+  redis-scheduler:
+    image: take-a-number_customer:latest
+    command: python manage.py rqscheduler
+    volumes:
+      - .:/customer_app
+
   tailwind:
     image: take-a-number_customer:latest
     command: npx tailwindcss build styles.css -o static/output.css
     volumes:
       - .:/customer_app
+    ports:
+      - "6379:6379"
+
+volumes:
+  redis_data:

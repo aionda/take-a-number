@@ -42,7 +42,8 @@ class Customer(TimeStampedModel):
     entered_store = models.BooleanField(default=False)
     no_show = models.BooleanField(default=False)
     canceled = models.BooleanField(default=False)
-    image = models.CharField(max_length=500, null=True)
+    time_up = models.BooleanField(default=False)
+    image = models.CharField(max_length=500, null=True, blank=True)
 
     def __str__(self):
         return f'{self.phone_number}'
