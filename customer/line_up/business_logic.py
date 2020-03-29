@@ -34,8 +34,7 @@ def dequeue_customer(store_id):
                                             no_show=False,
                                             canceled=False).order_by('created_on')
     if not next_customer:
-        print("no customer in line")
-        return
+        return None
 
     next_customer = next_customer[0]
     store = Store.objects.get(pk=store_id)
@@ -60,4 +59,4 @@ def dequeue_customer(store_id):
     next_customer.save()
 
     scheduler.enqueue_in(datetime.timedelta(minutes=1), remove_from_line, next_customer)
-
+    return next_customer

@@ -1,25 +1,25 @@
 $('#linemanager-form').on('submit', function(event){
     event.preventDefault();
-    console.log("form submitted!")
-    create_post();
+    line_customer_up();
 });
 
-function create_post() {
-    console.log("create post is working!")
-    console.log($(location).attr('pathname').split('/').slice(-1))
+function line_customer_up() {
     var store_id = $(location).attr('pathname').split('/').slice(-1)
     $.ajax({
         url : "/manage_line/" + store_id,
         type : "POST",
-        // data : { the_post : $('#post-text').val() }, // data sent with the post request
 
         // handle a successful response
         success : function(json) {
-            console.log(json); // log the returned json to the console
-            console.log("success"); // another sanity check
-            var toast = document.getElementById("toast-success");
-  			toast.classList.toggle("show");
-  			setTimeout(function(){ toast.classList.toggle("show") }, 3000);
+            if (json['next_customer'] == null){
+                var toast = document.getElementById("toast-no-next-customer");
+                toast.classList.toggle("show");
+                setTimeout(function(){ toast.classList.toggle("show") }, 3000);
+            } else {
+                var toast = document.getElementById("toast-success");
+                toast.classList.toggle("show");
+                setTimeout(function(){ toast.classList.toggle("show") }, 3000);
+            }
         },
 
         // handle a non-successful response
@@ -32,7 +32,6 @@ function create_post() {
 };
 
 $(function() {
-
 
     // This function gets cookie with a given name
     function getCookie(name) {

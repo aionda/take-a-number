@@ -83,11 +83,12 @@ class LineManagerView(TemplateView):
 
     def post(self, request, *args, **kwargs):
 
-        # dequeue user from line
-        dequeue_customer(self.kwargs['store_id'])
+        next_customer = dequeue_customer(self.kwargs['store_id'])
+        if next_customer:
+            next_customer = next_customer.id
 
         return HttpResponse(
-            json.dumps({"nothing to see": "this isn't happening"}),
+            json.dumps({"next_customer": next_customer}),
             content_type="application/json"
         )
 
