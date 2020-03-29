@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "/main.css" %}" />
+{% endblock %}
+
+{% block head_script %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+{% endblock %}
+
+{% block content %}
+{% csrf_token %}
+<div id="toast-error" class="toast min-w-full text-white text-center fixed invisible bg-red-600 py-3 px-5 rounded-sm z-10 top-0">Text failed, try again.</div>
+<div id="toast-success" class="toast min-w-full text-white text-center fixed invisible bg-green-600 py-3 px-5 rounded-sm z-10 top-0">Text sent</div>
+<form method="post" id="linemanager-form"></form>
+<div class="flex justify-center">
+  <p class="font-bold my-4">
+    {{ store.name }}, {{store.address }}
+  </p>
+</div>
+<div class="flex justify-center">
+  <button class="shadow text-2xl h-32 bg-blue-600 hover:bg-blue-400 focus:shadow-outline focus:outline-none text-white font-bold py-2 px-4 rounded" type="submit" form="linemanager-form">
+  Text the next person in line.
+  </button>
+</div>
+{% endblock %}
+
+{% block script %}
+<script src="{% static "scripts/main.js" %}"></script>
+{% endblock %}

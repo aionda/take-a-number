@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
+from timezone_field import TimeZoneField
 from phone_field import PhoneField
 
 
@@ -22,6 +23,7 @@ class Store(models.Model):
     state = models.CharField(max_length=5)
     contact_name = models.CharField(max_length=200)
     contact_phone_number = PhoneField(E164_only=True)
+    timezone = TimeZoneField()
 
     def save(self, *args, **kwargs):
         self.state = self.state.upper().strip()

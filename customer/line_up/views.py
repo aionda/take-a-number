@@ -1,12 +1,14 @@
+import json
+
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
-from django.views.generic import ListView
-from django.http import HttpResponseRedirect
+from django.views.generic import ListView, TemplateView
+from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 
 from .models import Customer, Store
 
-from .business_logic import send_text
+from .business_logic import send_text, dequeue_customer
 
 
 def index(request):
@@ -14,6 +16,7 @@ def index(request):
 
 
 class StoresListView(ListView):
+
     model = Store
     template_name = 'store_list.html'
     queryset = Store.objects.all().order_by('state')
@@ -25,12 +28,15 @@ class StoresListView(ListView):
 
 
 class SingleStoreListView(ListView):
+
     template_name = 'store_list.html'
+
     def get_queryset(self):
         return Store.objects.filter(state=self.kwargs['state'].upper())
 
 
 class LineupView(CreateView):
+
     model = Customer
     fields = ['phone_number']
     template_name = 'customer_form.html'
@@ -62,3 +68,28 @@ class LineupView(CreateView):
         #                                     'Otherwise, you\'ll have to line up again. '
         #                                     'Thanks for doing your part in social distancing.')
         return HttpResponseRedirect(reverse('lineup', args=[store_id]))
+
+
+class LineManagerView(TemplateView):
+
+    template_name = 'line_manager.html'
+
+    def post(self, request, *args, **kwargs):
+
+        # dequeue user from line
+        dequeue_customer(self.kwargs['store_id'],   f'It\'s your turn. '
+                                                    'You have until {} to enter the store. '
+                                                    'If you can\'t make it by that time, you\'ll have to line up again at {}.')
+
+        return HttpResponse(
+            json.dumps({"nothing to see": "this isn't happening"}),
+            content_type="application/json"
+        )
+
+    def get_context_data(self, **kwargs):
+        store_obj = Store.objects.get(pk=self.kwargs['store_id'])
+        ctx = super().get_context_data(**kwargs)
+        ctx['state'] = store_obj.state
+        ctx['store'] = store_obj
+        return ctx
+
