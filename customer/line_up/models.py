@@ -1,3 +1,5 @@
+from pytz import country_timezones
+
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 
@@ -23,7 +25,7 @@ class Store(models.Model):
     state = models.CharField(max_length=5)
     contact_name = models.CharField(max_length=200)
     contact_phone_number = PhoneField(E164_only=True)
-    timezone = TimeZoneField()
+    timezone = TimeZoneField(choices=[(tz, tz) for tz in country_timezones('us')])
 
     def save(self, *args, **kwargs):
         self.state = self.state.upper().strip()
