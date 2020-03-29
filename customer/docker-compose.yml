@@ -38,8 +38,6 @@ services:
     command: npx tailwindcss build styles.css -o static/output.css
     volumes:
       - .:/customer_app
-    ports:
-      - "6379:6379"
 
 volumes:
   redis_data:
