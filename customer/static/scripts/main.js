@@ -9,8 +9,8 @@ function create_post() {
     console.log($(location).attr('pathname').split('/').slice(-1))
     var store_id = $(location).attr('pathname').split('/').slice(-1)
     $.ajax({
-        url : "/manage_line/" + store_id, // the endpoint
-        type : "POST", // http method
+        url : "/manage_line/" + store_id,
+        type : "POST",
         // data : { the_post : $('#post-text').val() }, // data sent with the post request
 
         // handle a successful response

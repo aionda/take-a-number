@@ -54,10 +54,13 @@ class LineupView(CreateView):
 
         store_obj = Store.objects.get(pk=store_id)
         self.object.store_line = store_obj
-        num_customers_in_line = Customer.objects.filter(store_line=store_obj,
-                                                        up_next_text_sent=False,
-                                                        entered_store=False,
-                                                        canceled=False).count()
+        # num_customers_in_line = Customer.objects.filter(store_line=store_obj,
+        #                                                 up_next_text_sent=False,
+        #                                                 entered_store=False,
+        #                                                 canceled=False).count()
+
+        # stream person added to pubnub
+        # stream person removed to pubnub when cancel is sent
 
         self.object.save()
 
@@ -66,10 +69,14 @@ class LineupView(CreateView):
         #                                     'You\'ll receive a text once we\'re ready for you to show up. '
         #                                     'You must show up within 5 minutes after that text is sent. '
         #                                     'Otherwise, you\'ll have to line up again. '
+        #                                     'Make sure you have good reception. '
         #                                     'Thanks for doing your part in social distancing.')
         return HttpResponseRedirect(reverse('lineup', args=[store_id]))
 
 
+# login required
+# open business
+# close business
 class LineManagerView(TemplateView):
 
     template_name = 'line_manager.html'
@@ -77,9 +84,7 @@ class LineManagerView(TemplateView):
     def post(self, request, *args, **kwargs):
 
         # dequeue user from line
-        dequeue_customer(self.kwargs['store_id'],   f'It\'s your turn. '
-                                                    'You have until {} to enter the store. '
-                                                    'If you can\'t make it by that time, you\'ll have to line up again at {}.')
+        dequeue_customer(self.kwargs['store_id'])
 
         return HttpResponse(
             json.dumps({"nothing to see": "this isn't happening"}),

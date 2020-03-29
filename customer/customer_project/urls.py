@@ -20,6 +20,7 @@ from line_up.views import LineupView, index, StoresListView, SingleStoreListView
 
 
 urlpatterns = [
+# unique registration link
 	path('', index, name='home'),
 	path('stores/', StoresListView.as_view(), name='stores_list'),
 	path('stores/<str:state>', SingleStoreListView.as_view(), name='stores_in_state'),

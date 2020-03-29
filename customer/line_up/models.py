@@ -19,7 +19,7 @@ class MyUser(AbstractUser, TimeStampedModel):
     pass
 
 
-class Store(models.Model):
+class Store(TimeStampedModel):
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=500)
     state = models.CharField(max_length=5)
@@ -35,13 +35,14 @@ class Store(models.Model):
         return f'{self.name}, {self.address}'
 
 
-class Customer(models.Model):
+class Customer(TimeStampedModel):
     phone_number = PhoneField(E164_only=True)
     store_line = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
     up_next_text_sent = models.BooleanField(default=False)
     entered_store = models.BooleanField(default=False)
+    no_show = models.BooleanField(default=False)
     canceled = models.BooleanField(default=False)
-    image = models.CharField(max_length=500)
+    image = models.CharField(max_length=500, null=True)
 
     def __str__(self):
         return f'{self.phone_number}'

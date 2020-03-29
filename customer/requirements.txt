@@ -1,7 +1,9 @@
 Django>=2.0,<3.0
 django-phone-field==1.8.0
 django-timezone-field==4.0
+django-rq==2.3.0
 django-widget-tweaks==1.4.8
 psycopg2>=2.7,<3.0
 pytz==2019.3
+rq-scheduler==0.9
 twilio==6.37.0
