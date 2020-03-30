@@ -8,8 +8,12 @@
 <script src="https://maps.googleapis.com/maps/api/js?key={{ gmaps_api_key }}"></script>
 <script>
   if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(getDistance);
+    navigator.geolocation.getCurrentPosition(getDistance, handleError);
   } else {
+    window.location.replace("/");
+  }
+
+  function handleError(error) {
     window.location.replace("/");
   }
 
