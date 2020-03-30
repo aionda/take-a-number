@@ -34,7 +34,7 @@ def send_text(recipient, message):
 
 def remove_from_line(customer, pubnub_sub_key, pubnub_pub_key):
 
-    send_text(customer, "Your time is up! If you couldn't make it to the store by now, please line up again. Otherwise, ignore this text and have a great day!")
+    send_text(customer.phone_number, "Your time is up! If you couldn't make it to the store by now, please line up again. Otherwise, please be mindful of others in line and have a great day!")
 
     data = f'{{"number": "{customer.phone_number.base_number}", "operation": "remove"}}'
     response = requests.post(f'https://ps.pndsn.com/publish/{settings.PUBNUB_PUBLISH_KEY}/{settings.PUBNUB_SUBSCRIBE_KEY}/0/pubnub_onboarding_channel/myCallback', data=data)
@@ -57,8 +57,8 @@ def dequeue_customer(store_id):
     calculated_time_utc = datetime.datetime.now(pytz.timezone('UTC')) + datetime.timedelta(seconds=20)
     calculated_time_timezone = calculated_time_utc.astimezone(store.timezone)
     formatted_time = calculated_time_timezone.strftime('%I:%M %p')
-    send_text(next_customer,    f'It\'s your turn. '
-                                'You have until {formatted_time} to enter the store. '
+    send_text(next_customer.phone_number,    f'It\'s your turn. '
+                                f'You have until {formatted_time} to enter the store. '
                                 'If you can\'t make it by that time, you\'ll have to line up again.')
 
     pubnub.publish().channel("pubnub_onboarding_channel").message({"number": next_customer.phone_number.base_number, "time": formatted_time, "operation": "add"}).pn_async(my_publish_callback)

@@ -66,11 +66,10 @@ class LineupView(CreateView):
         self.object.save()
 
         send_text(self.object.phone_number, f'You\'re in line for {store_obj.name} at {store_obj.address}. '
-                                            'There are {num_customers_in_line} people in front of you.'
+                                            f'There are {num_customers_in_line} people in front of you. '
                                             'You\'ll receive a text once we\'re ready for you to show up. '
                                             'You must show up by the time sent in that text. '
-                                            'Otherwise, you\'ll have to line up again. NO EXCEPTIONS.'
-                                            'Please be mindful of others in line. '
+                                            'Otherwise, you\'ll have to line up again. NO EXCEPTIONS. '
                                             'Make sure you have good reception. '
                                             'Thanks for doing your part in social distancing.')
         return HttpResponseRedirect(reverse('lineup', args=[store_id]))
