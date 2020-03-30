@@ -8,6 +8,7 @@
 
 {% block head_script %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<script src="https://cdn.pubnub.com/sdk/javascript/pubnub.4.27.3.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -30,4 +31,28 @@
 
 {% block script %}
 <script src="{% static "scripts/main.js" %}"></script>
+<script>
+  const pubnub = new PubNub({
+    publishKey: "{{ pubnub_publish_key }}",
+    subscribeKey: "{{ pubnub_subscribe_key }}",
+  });
+
+  pubnub.subscribe({
+    channels: ['pubnub_onboarding_channel']
+  });
+
+  pubnub.addListener({
+    message: function(event) {
+      console.log(event.message)
+      if (event.message.operation == 'add') {
+        let pElement = document.createElement('p');
+        pElement.appendChild(document.createTextNode(event.message.number+" "+event.message.time));
+        pElement.setAttribute('id', event.message.number);
+        document.body.appendChild(pElement);
+      } else if (event.message.operation == 'remove') {
+        document.getElementById(event.message.number).style.color = "red";
+      }
+    }
+  });
+</script>
 {% endblock %}

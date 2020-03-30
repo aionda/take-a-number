@@ -57,23 +57,22 @@ class LineupView(CreateView):
 
         store_obj = Store.objects.get(pk=store_id)
         self.object.store_line = store_obj
-        # num_customers_in_line = Customer.objects.filter(store_line=store_obj,
-        #                                                 up_next_text_sent=False,
-        #                                                 entered_store=False,
-        #                                                 canceled=False).count()
-
-        # stream person added to pubnub
-        # stream person removed to pubnub when cancel is sent
-
+        num_customers_in_line = Customer.objects.filter(store_line=store_obj,
+                                                        up_next_text_sent=False,
+                                                        entered_store=False,
+                                                        canceled=False,
+                                                        no_show=False,
+                                                        time_up=False).count()
         self.object.save()
 
-        # send_text(self.object.phone_number, f'You\'re in line for {store_obj.name} at {store_obj.address}. '
-        #                                     'There are {num_customers_in_line} people in front of you.'
-        #                                     'You\'ll receive a text once we\'re ready for you to show up. '
-        #                                     'You must show up within 5 minutes after that text is sent. '
-        #                                     'Otherwise, you\'ll have to line up again. '
-        #                                     'Make sure you have good reception. '
-        #                                     'Thanks for doing your part in social distancing.')
+        send_text(self.object.phone_number, f'You\'re in line for {store_obj.name} at {store_obj.address}. '
+                                            'There are {num_customers_in_line} people in front of you.'
+                                            'You\'ll receive a text once we\'re ready for you to show up. '
+                                            'You must show up by the time sent in that text. '
+                                            'Otherwise, you\'ll have to line up again. NO EXCEPTIONS.'
+                                            'Please be mindful of others in line. '
+                                            'Make sure you have good reception. '
+                                            'Thanks for doing your part in social distancing.')
         return HttpResponseRedirect(reverse('lineup', args=[store_id]))
 
 
@@ -97,5 +96,7 @@ class LineManagerView(TemplateView):
         ctx = super().get_context_data(**kwargs)
         ctx['state'] = store_obj.state
         ctx['store'] = store_obj
+        ctx['pubnub_publish_key'] = settings.PUBNUB_PUBLISH_KEY
+        ctx['pubnub_subscribe_key'] = settings.PUBNUB_SUBSCRIBE_KEY
         return ctx
 

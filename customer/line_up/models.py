@@ -33,8 +33,7 @@ class Store(TimeStampedModel):
 
 
 class MyUser(AbstractUser, TimeStampedModel):
-    store = models.ForeignKey(Store, on_delete=models.CASCADE)
-    email = models.EmailField(unique=True)
+    pass
 
 
 class Customer(TimeStampedModel):
