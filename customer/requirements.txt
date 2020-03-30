@@ -1,5 +1,6 @@
 Django>=2.0,<3.0
 django-phone-field==1.8.0
+django-invitations==1.9.3
 django-timezone-field==4.0
 django-redis==4.11.0
 django-rq==2.3.0

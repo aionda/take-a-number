@@ -32,7 +32,8 @@ def dequeue_customer(store_id):
                                             up_next_text_sent=False,
                                             entered_store=False,
                                             no_show=False,
-                                            canceled=False).order_by('created_on')
+                                            canceled=False,
+                                            time_up=False).order_by('created_on')
     if not next_customer:
         return None
 

@@ -15,10 +15,6 @@ class TimeStampedModel(models.Model):
         abstract = True
 
 
-class MyUser(AbstractUser, TimeStampedModel):
-    pass
-
-
 class Store(TimeStampedModel):
     name = models.CharField(max_length=200)
     address = models.CharField(max_length=500)
@@ -26,6 +22,7 @@ class Store(TimeStampedModel):
     contact_name = models.CharField(max_length=200)
     contact_phone_number = PhoneField(E164_only=True)
     timezone = TimeZoneField(choices=[(tz, tz) for tz in country_timezones('us')])
+    business_open = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):
         self.state = self.state.upper().strip()
@@ -35,9 +32,14 @@ class Store(TimeStampedModel):
         return f'{self.name}, {self.address}'
 
 
+class MyUser(AbstractUser, TimeStampedModel):
+    store = models.ForeignKey(Store, on_delete=models.CASCADE)
+    email = models.EmailField(unique=True)
+
+
 class Customer(TimeStampedModel):
     phone_number = PhoneField(E164_only=True)
-    store_line = models.ForeignKey(Store, on_delete=models.CASCADE, null=True)
+    store_line = models.ForeignKey(Store, on_delete=models.CASCADE)
     up_next_text_sent = models.BooleanField(default=False)
     entered_store = models.BooleanField(default=False)
     no_show = models.BooleanField(default=False)
