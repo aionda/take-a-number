@@ -6,6 +6,34 @@
 {% block head_script %}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script src="https://maps.googleapis.com/maps/api/js?key={{ gmaps_api_key }}"></script>
+<script>
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(getDistance);
+  } else {
+    window.location.replace("/");
+  }
+
+  function getDistance(position) {
+    var service = new google.maps.DistanceMatrixService();
+    var origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+    var destination = "{{ store.address }}";
+    service.getDistanceMatrix(
+    {
+      origins:[origin],
+      destinations: [destination],
+      travelMode: "WALKING"
+    }, callback);
+  }
+
+  function callback(response, status) {
+    if (status == "OK") {
+      distance = response.rows[0].elements[0].distance.value
+      if (distance > 100) {
+        window.location.replace("/");
+      }
+    }
+  }
+</script>
 {% endblock %}
 
 {% block content %}
@@ -45,38 +73,38 @@
   extension_label.style.display = "none"
   extension_field.style.display = "none"
 
-  var button = document.getElementById("lineup-button");
-  var container = document.getElementById("lineup-button-container");
+  // var button = document.getElementById("lineup-button");
+  // var container = document.getElementById("lineup-button-container");
     
-  if (navigator.geolocation) {
-    navigator.geolocation.getCurrentPosition(getDistance);
-  } else {
-    button.remove()
-    container.innerHTML = "Turn on geolocation to line up.";
-  }
+  // if (navigator.geolocation) {
+  //   navigator.geolocation.getCurrentPosition(getDistance);
+  // } else {
+  //   button.remove()
+  //   container.innerHTML = "Turn on geolocation to line up.";
+  // }
   
-  function getDistance(position) {
-    var service = new google.maps.DistanceMatrixService();
-    var origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-    var destination = "{{ store.address }}";
-    console.log(origin)
-    console.log(destination)
-    service.getDistanceMatrix(
-    {
-      origins:[origin],
-      destinations: [destination],
-      travelMode: "WALKING"
-    }, callback);
-  }
+  // function getDistance(position) {
+  //   var service = new google.maps.DistanceMatrixService();
+  //   var origin = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+  //   var destination = "{{ store.address }}";
+  //   console.log(origin)
+  //   console.log(destination)
+  //   service.getDistanceMatrix(
+  //   {
+  //     origins:[origin],
+  //     destinations: [destination],
+  //     travelMode: "WALKING"
+  //   }, callback);
+  // }
 
-  function callback(response, status) {
-    if (status == "OK") {
-      distance = response.rows[0].elements[0].distance.value
-      if (distance > 100) {
-        button.remove()
-        container.innerHTML = "You have to be within 100 meters from the store to line up.";
-      }
-    }
-  }
+  // function callback(response, status) {
+  //   if (status == "OK") {
+  //     distance = response.rows[0].elements[0].distance.value
+  //     if (distance > 100) {
+  //       button.remove()
+  //       container.innerHTML = "You have to be within 100 meters from the store to line up.";
+  //     }
+  //   }
+  // }
 </script>
 {% endblock %}

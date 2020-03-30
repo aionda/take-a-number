@@ -8,8 +8,6 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
 from django.conf import settings
 
-import googlemaps
-
 from .models import Customer, Store
 
 from .business_logic import send_text, dequeue_customer
