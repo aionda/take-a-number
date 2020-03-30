@@ -1,10 +1,14 @@
 import json
+from requests import get
 
 from django.shortcuts import render
 from django.views.generic.edit import CreateView
 from django.views.generic import ListView, TemplateView
 from django.http import HttpResponseRedirect, HttpResponse
 from django.urls import reverse
+from django.conf import settings
+
+import googlemaps
 
 from .models import Customer, Store
 
@@ -46,6 +50,7 @@ class LineupView(CreateView):
         ctx = super().get_context_data(**kwargs)
         ctx['state'] = store_obj.state
         ctx['store'] = store_obj
+        ctx['gmaps_api_key'] = settings.GOOGLE_MAPS_KEY
         return ctx
 
     def form_valid(self, form):
@@ -74,9 +79,6 @@ class LineupView(CreateView):
         return HttpResponseRedirect(reverse('lineup', args=[store_id]))
 
 
-# login required
-# open business
-# close business
 class LineManagerView(TemplateView):
 
     template_name = 'line_manager.html'
