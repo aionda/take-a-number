@@ -8,6 +8,6 @@ django-widget-tweaks==1.4.8
 psycopg2>=2.7,<3.0
 pubnub==4.5.0
 pytz==2019.3
-requests==2.23.0
+requests==2.31.0
 rq-scheduler==0.9
 twilio==6.37.0
